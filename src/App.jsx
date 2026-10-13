@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Moon, Sun, LogOut, X } from "lucide-react";
+import { Moon, Sun, LogOut, X, BookOpen } from "lucide-react";
 import Financeiro, {
   useFinanceiro, criarAdaptadorLocal, criarAdaptadorSupabase,
   ToolbarButton, PersonalizarAparencia, useLogo, aplicarTema, temaSalvo,
@@ -111,6 +111,17 @@ function Tela({ adaptador, aoSair }) {
         logo={logo}
         acoes={
           <>
+            {/* Guia de instalação do aluno (public/guia). Abre em outra aba. */}
+            <a
+              href={`${import.meta.env.BASE_URL}guia/`}
+              target="_blank"
+              rel="noreferrer"
+              title="Guia de instalação"
+              aria-label="Guia de instalação"
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-[10px] bg-neutro-100/80 text-neutro-700 transition-colors hover:bg-neutro-200/70 md:h-9 md:w-9 dark:bg-s4 dark:text-t1 dark:shadow-edge dark:hover:bg-s5"
+            >
+              <BookOpen size={14} />
+            </a>
             <PersonalizarAparencia marca={MARCA} className={CTRL_ICONE} />
             <ToolbarButton
               icon={tema === "escuro" ? Sun : Moon}

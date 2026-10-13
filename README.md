@@ -1,5 +1,7 @@
 # Financeiro — template
 
+**Guia de instalação passo a passo:** https://gabrieljuste0971-droid.github.io/financeiro-template/guia/ · **Demonstração:** https://gabrieljuste0971-droid.github.io/financeiro-template/
+
 Tela de fechamento financeiro mensal para negócio de serviços: entradas, saídas, clientes fixos, meta, saldo em caixa, fluxo de caixa, fila de notas fiscais e controle de sinal de 50%.
 
 Funciona na hora, sem backend. A marca (cor, logo, fonte, nome) fica em um arquivo só, e quem usa a tela ainda troca logo e cores por um botão.
