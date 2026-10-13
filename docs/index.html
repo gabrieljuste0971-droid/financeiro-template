@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0b14" />
+    <link rel="icon" type="image/svg+xml" href="/financeiro-template/favicon.svg" />
+    <title>Financeiro · Gestão Criativa</title>
+    <!-- Fonte da marca (Rethink Sans, a da Gestão Criativa). Para trocar: mude o link abaixo e o campo `fonte` em src/marca.js. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Aplica claro/escuro antes do React montar, pra não piscar a tela. A
+         mesma regra vive em src/financeiro/tema.js (temaSalvo/aplicarTema). -->
+    <script>
+      (function () {
+        try {
+          var escuro = (localStorage.getItem("financeiro_tema") || "escuro") !== "claro";
+          document.documentElement.classList.toggle("dark", escuro);
+          document.documentElement.style.colorScheme = escuro ? "dark" : "light";
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/financeiro-template/assets/index-BDMyAuuP.js"></script>
+    <link rel="stylesheet" crossorigin href="/financeiro-template/assets/index-BWPglWRh.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

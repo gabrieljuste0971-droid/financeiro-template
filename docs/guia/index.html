@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000624">
+<title>Instalar o Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: coluna de leitura de 720px; hero navy curto; seções separadas por respiro, não por caixas;
+   passos numa trilha vertical (número roxo + linha); caixas de pedido em navy com cantos 16;
+   a "borda funda" da marca aparece de leve: base de 4px, só em cards e botões. */
+:root{
+  --font-sans:"Rethink Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --surface:#F3F3FF; --surface-2:#FFFFFF; --surface-inverse:#000624;
+  --ink:#070540; --ink-2:#3F3E7A; --ink-3:#6E6D9C; --ink-inverse:#F3F3FF; --ink-inverse-2:#A8A8A8;
+  --accent:#5755FF; --accent-ink:#4442E6; --accent-soft:#E9E9FF; --accent-line:#CDCDF2;
+  --action:#FE4311; --highlight:#FE4311; --highlight-inverse:#FC8A58;
+  --line:#CDCDF2; --line-2:#DEDEF7; --base:#CDCDF2; --focus:#8E8DFF;
+  --code-bg:#000624; --code-ink:#F3F3FF; --code-ink-2:#A8A8A8; --code-line:rgba(142,141,255,.35);
+  --ok:#2B8C03; --warn-bg:#FFF1EA; --warn-line:#FFC9B3; --warn-ink:#8A2A0A;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --surface:#000624; --surface-2:#0A0A40; --surface-inverse:#F3F3FF;
+  --ink:#F3F3FF; --ink-2:#C9C9EE; --ink-3:#A8A8A8; --ink-inverse:#070540; --ink-inverse-2:#3F3E7A;
+  --accent:#8E8DFF; --accent-ink:#B9B8FF; --accent-soft:rgba(87,85,255,.18); --accent-line:rgba(142,141,255,.35);
+  --highlight:#FC8A58; --highlight-inverse:#FE4311;
+  --line:rgba(142,141,255,.22); --line-2:rgba(142,141,255,.14); --base:rgba(142,141,255,.25);
+  --code-bg:#05052E; --code-line:rgba(142,141,255,.4);
+  --warn-bg:rgba(254,67,17,.12); --warn-line:rgba(254,67,17,.35); --warn-ink:#FFB59A;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --surface:#000624; --surface-2:#0A0A40; --surface-inverse:#F3F3FF;
+  --ink:#F3F3FF; --ink-2:#C9C9EE; --ink-3:#A8A8A8; --ink-inverse:#070540; --ink-inverse-2:#3F3E7A;
+  --accent:#8E8DFF; --accent-ink:#B9B8FF; --accent-soft:rgba(87,85,255,.18); --accent-line:rgba(142,141,255,.35);
+  --highlight:#FC8A58; --highlight-inverse:#FE4311;
+  --line:rgba(142,141,255,.22); --line-2:rgba(142,141,255,.14); --base:rgba(142,141,255,.25);
+  --code-bg:#05052E; --code-line:rgba(142,141,255,.4);
+  --warn-bg:rgba(254,67,17,.12); --warn-line:rgba(254,67,17,.35); --warn-ink:#FFB59A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:3px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{width:min(100%,720px);margin:0 auto;padding-inline:20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Hero */
+.hero{background:var(--surface-inverse);color:var(--ink-inverse);padding-block:32px 72px}
+.hero .wrap{display:flex;flex-direction:column;gap:20px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.logo{width:200px;max-width:55%;display:block;color:var(--ink-inverse)}
+.logo svg{width:100%;height:auto;display:block}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(142,141,255,.16);border:1px solid rgba(142,141,255,.45);color:var(--ink-inverse);font-size:13px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--action);flex-shrink:0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8E8DFF}
+.hero h1{font-size:clamp(34px,5.2vw,56px);line-height:1.05;font-weight:700;letter-spacing:-1.2px;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--highlight-inverse)}
+.hero .lead{font-size:clamp(17px,2vw,19px);line-height:1.5;max-width:56ch;color:var(--ink-inverse-2)}
+.hero .lead strong{color:var(--ink-inverse);font-weight:600}
+.progresso{display:flex;align-items:center;gap:14px;margin-top:6px;max-width:460px}
+.progresso .trilho{flex:1;height:8px;border-radius:999px;background:rgba(142,141,255,.22);overflow:hidden}
+.progresso .barra{height:100%;width:0;background:var(--action);border-radius:999px;transition:width .5s ease}
+.progresso .rotulo{font-size:13px;font-weight:700;letter-spacing:.02em;white-space:nowrap;color:var(--ink-inverse)}
+
+/* Corpo */
+.dobra{position:relative;margin-top:-36px;background:var(--surface);border-radius:36px 36px 0 0;padding-block:44px 80px}
+.dobra .wrap{display:flex;flex-direction:column;gap:72px}
+section{display:flex;flex-direction:column;gap:24px}
+section>header{display:flex;flex-direction:column;gap:8px}
+section>header .eyebrow{color:var(--accent-ink)}
+section h2{font-size:clamp(26px,3.4vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.8px}
+section h2 em{font-style:normal;color:var(--highlight)}
+section>header p{color:var(--ink-2);font-size:17px;max-width:58ch}
+.aviso{display:flex;gap:12px;align-items:flex-start;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
+.aviso b{font-weight:700}
+
+/* Cards leves com base de 4px */
+.card{background:var(--surface-2);border:1px solid var(--line);border-bottom:4px solid var(--base);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h3{font-size:19px;line-height:1.3;font-weight:700;letter-spacing:-.2px}
+.card p{color:var(--ink-2)}
+.dica{color:var(--ink-3);font-size:14px;line-height:1.5}
+.dica b,.dica a{color:var(--ink-2)}
+
+/* Trilha de passos */
+.lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;position:relative}
+.passo{display:grid;grid-template-columns:36px 1fr;gap:18px;position:relative;padding-bottom:34px}
+.passo:last-child{padding-bottom:0}
+.passo::before{content:"";position:absolute;left:17px;top:40px;bottom:4px;width:2px;background:var(--line-2)}
+.passo:last-child::before{display:none}
+.num{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink);border:2px solid var(--accent);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;transition:background .25s,color .25s,border-color .25s;position:relative;z-index:1}
+.passo.feito .num{background:var(--ok);border-color:var(--ok);color:#fff}
+.passo.feito .num span{display:none}
+.passo.feito .num::after{content:"";width:11px;height:6px;border:2.5px solid #fff;border-top:0;border-right:0;transform:translateY(-2px) rotate(-45deg)}
+.passo .corpo{display:flex;flex-direction:column;gap:12px;min-width:0;padding-top:4px}
+.check{display:flex;align-items:flex-start;gap:12px;cursor:pointer;font-size:17px;line-height:1.45;color:var(--ink)}
+.check b{font-weight:700}
+.check input{appearance:none;width:20px;height:20px;margin:4px 0 0;flex-shrink:0;border:2px solid var(--accent);border-radius:6px;background:transparent;display:grid;place-items:center;cursor:pointer;transition:background .2s}
+.check input:checked{background:var(--accent)}
+.check input:checked::after{content:"";width:10px;height:6px;border:2.5px solid #fff;border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.check input:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.passo .dica{max-width:60ch}
+code.inline{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--accent-soft);color:var(--ink);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+
+/* Caixa de pedido */
+.prompt{background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-line);border-radius:16px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.prompt .rot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--code-ink-2)}
+.prompt pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--font-sans);font-size:15.5px;line-height:1.55;user-select:all}
+.copiar{display:inline-flex;align-items:center;gap:6px;background:rgba(142,141,255,.16);color:#F3F3FF;border:1px solid rgba(142,141,255,.5);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:background .15s,border-color .15s;white-space:nowrap}
+.copiar:hover{background:rgba(142,141,255,.3)}
+.copiar.ok{background:var(--ok);border-color:var(--ok)}
+.copiar svg{width:13px;height:13px}
+
+/* Escolha de caminho */
+.escolha{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px}
+.opcao{text-align:left;background:var(--surface-2);color:var(--ink);border:2px solid var(--line);border-radius:20px;padding:20px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s,box-shadow .2s;cursor:pointer}
+.opcao .radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);flex-shrink:0;margin-top:2px;display:grid;place-items:center;transition:background .2s}
+.opcao[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 4px 0 0 var(--accent)}
+.opcao[aria-pressed="true"] .radio{background:var(--accent)}
+.opcao[aria-pressed="true"] .radio::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.opcao .txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.opcao .t{font-size:18px;font-weight:700;letter-spacing:-.2px}
+.opcao .d{font-size:14.5px;color:var(--ink-2);line-height:1.45}
+
+/* Gerador */
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:16px}
+.campo{display:flex;flex-direction:column;gap:6px;min-width:0}
+.campo label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.campo input[type="text"],.campo select{font:inherit;font-size:16px;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);min-width:0;width:100%}
+.campo input[type="text"]:focus,.campo select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.cor{display:flex;gap:10px;align-items:center}
+.cor input[type="color"]{width:46px;height:46px;padding:0;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;flex-shrink:0}
+.cor input[type="text"]{flex:1}
+.grade-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 4px;color:var(--ink)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;line-height:1;color:var(--accent-ink);flex-shrink:0;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:var(--accent-soft)}
+details[open] summary::after{content:"–"}
+details .r{padding:0 4px 18px;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.5;color:var(--ink-2);max-width:62ch}
+details .r b{color:var(--ink)}
+
+.final{display:flex;flex-direction:column;gap:10px;background:var(--surface-inverse);color:var(--ink-inverse);border-radius:24px;padding:28px}
+.final h3{font-size:22px;letter-spacing:-.4px}
+.final p{color:var(--ink-inverse-2)}
+.final p b{color:var(--ink-inverse)}
+footer{padding-block:24px 40px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;color:var(--ink-3)}
+@media (max-width:520px){
+  .passo{grid-template-columns:30px 1fr;gap:14px}
+  .num{width:30px;height:30px;font-size:13px}
+  .passo::before{left:14px;top:34px}
+  .card{padding:18px;border-radius:16px}
+  .dobra{border-radius:24px 24px 0 0}
+  .topo{flex-direction:column;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>html{color-scheme:light dark} img{max-width:100%} [hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="topo"><a class="logo" href="https://gestaocriativa.com.br" aria-label="Gestão Criativa"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1054.02 179.05">      <g transform="scale(0.17698)">        <path d="M0 321.49V690.4C0 739.36 26.12 784.6 68.52 809.08L388 993.53C430.4 1018.01 482.64 1018.01 525.04 993.53L844.52 809.08C886.92 784.6 913.04 739.36 913.04 690.4V321.49C913.04 272.53 886.92 227.29 844.52 202.81L525.04 18.36C482.64 -6.12 430.4 -6.12 388 18.36L68.52 202.81C26.12 227.29 0 272.53 0 321.49Z" fill="#5755FF" />        <path d="M694.68 290L498.59 176.79C472.57 161.76 440.5 161.76 414.48 176.79L218.39 290C192.36 305.03 176.33 332.79 176.33 362.84V589.26C176.33 619.31 192.36 647.08 218.39 662.1L238.03 673.44V515.9C238.03 492.47 250.53 470.81 270.83 459.1L423.74 370.82C444.03 359.1 469.04 359.1 489.33 370.82L642.24 459.1C662.54 470.82 675.04 492.47 675.04 515.9V673.44L694.69 662.1C720.71 647.07 736.74 619.31 736.74 589.26V362.84C736.74 332.79 720.71 305.02 694.69 290H694.68Z" fill="#fff" />        <path d="M383.38 516.65H406.57C416.68 516.65 424.9 524.86 424.9 534.98V675.29C424.9 685.4 416.69 693.61 406.58 693.61H383.38C373.27 693.61 365.06 685.4 365.06 675.29V534.98C365.06 524.87 373.27 516.65 383.39 516.65H383.38Z" fill="#fff" />        <path d="M508.5 516.05H531.63C541.76 516.05 549.99 524.28 549.99 534.41V675.25C549.99 685.38 541.76 693.61 531.63 693.61H508.5C498.37 693.61 490.14 685.38 490.14 675.25V534.4C490.14 524.27 498.37 516.04 508.5 516.04V516.05Z" fill="#fff" />        <path d="M414.47 775.33L238.03 673.46V692.49C238.03 715.92 250.53 737.58 270.83 749.29L423.74 837.57C444.03 849.29 469.04 849.29 489.33 837.57L642.24 749.29C662.54 737.57 675.04 715.92 675.04 692.49V673.46L498.6 775.33C472.58 790.36 440.51 790.36 414.49 775.33H414.47Z" fill="#fff" />      </g>      <g transform="translate(185.89 46.16)" fill="currentColor">        <path d="M42.98 94.55C34.36 94.55 26.83 92.59 20.38 88.67C13.94 84.75 8.92999 79.27 5.35999 72.21C1.78999 65.16 0 57.02 0 47.79C0 38.56 1.73998 30.73 5.22998 23.5C8.70998 16.27 13.87 10.55 20.7 6.33C27.53 2.11 35.87 0 45.71 0C56.42 0 65.3 2.56999 72.35 7.70999C79.4 12.85 83.98 19.94 86.06 29H67.38C65.99 24.74 63.46 21.41 59.8 19.01C56.14 16.62 51.44 15.42 45.7 15.42C39.6 15.42 34.42 16.72 30.16 19.34C25.89 21.95 22.65 25.68 20.43 30.51C18.21 35.34 17.1 41.15 17.1 47.95C17.1 54.75 18.21 60.38 20.43 65.12C22.65 69.87 25.83 73.48 29.96 75.96C34.09 78.44 38.95 79.68 44.52 79.68C52.36 79.68 58.36 77.68 62.54 73.67C66.72 69.67 69.37 64.35 70.51 57.74H41.39V43.64H87.75V93.01H72.34L71.03 80.99C68.07 85.34 64.37 88.7 59.93 91.04C55.49 93.39 49.83 94.57 42.95 94.57L42.98 94.55Z" />        <path d="M129.05 94.55C122.26 94.55 116.4 93.07 111.49 90.11C106.57 87.15 102.76 83.1 100.06 77.96C97.36 72.82 96.01 67.03 96.01 60.59C96.01 53.71 97.4 47.75 100.19 42.7C102.97 37.65 106.85 33.71 111.81 30.88C116.77 28.05 122.52 26.64 129.05 26.64C135.58 26.64 141.13 28.03 145.96 30.82C150.79 33.61 154.58 37.44 157.32 42.31C160.06 47.19 161.43 52.8 161.43 59.16C161.43 60.29 161.38 61.4 161.3 62.49C161.21 63.58 161.08 64.6 160.91 65.56H112.85C113.11 68.61 113.92 71.29 115.27 73.59C116.62 75.9 118.45 77.68 120.75 78.95C123.06 80.21 125.69 80.85 128.65 80.85C131.61 80.85 134.33 80.2 136.55 78.89C138.77 77.58 140.53 75.58 141.84 72.88H159.73C158.51 76.71 156.55 80.28 153.85 83.59C151.15 86.9 147.73 89.55 143.6 91.55C139.46 93.55 134.61 94.56 129.04 94.56L129.05 94.55ZM112.98 54.46H144.19C144.1 50.11 142.51 46.67 139.42 44.14C136.33 41.61 132.7 40.35 128.51 40.35C124.94 40.35 121.63 41.46 118.58 43.68C115.53 45.9 113.66 49.49 112.96 54.45L112.98 54.46Z" />        <path d="M194.48 94.55C189.6 94.55 185.03 93.66 180.77 91.87C176.5 90.09 173 87.54 170.25 84.23C167.51 80.92 166.01 77.05 165.75 72.61H182.47C182.9 75.4 184.27 77.57 186.58 79.14C188.89 80.71 191.48 81.49 194.35 81.49C196.79 81.49 199.07 80.95 201.21 79.86C203.34 78.77 204.41 77.05 204.41 74.7C204.41 72.87 203.63 71.43 202.06 70.39C200.49 69.35 198.66 68.52 196.57 67.91C194.48 67.3 192.57 66.78 190.83 66.34C186.47 65.3 182.51 64.05 178.94 62.62C175.37 61.18 172.54 59.18 170.45 56.61C168.36 54.04 167.31 50.62 167.31 46.36C167.31 42.1 168.51 38.61 170.9 35.65C173.29 32.69 176.47 30.45 180.43 28.93C184.39 27.41 188.68 26.64 193.29 26.64C200.52 26.64 206.61 28.47 211.57 32.12C216.53 35.78 219.23 41.18 219.67 48.31H203.87C203.61 45.53 202.45 43.42 200.41 41.98C198.36 40.55 195.82 39.83 192.77 39.83C190.33 39.83 188.16 40.27 186.24 41.14C184.32 42.01 183.37 43.67 183.37 46.1C183.37 47.84 184.16 49.26 185.72 50.35C187.29 51.44 189.16 52.31 191.34 52.96C193.51 53.61 195.43 54.16 197.09 54.59C201.62 55.72 205.6 57.03 209.04 58.51C212.48 59.99 215.2 61.99 217.2 64.52C219.2 67.05 220.25 70.44 220.34 74.71C220.34 78.98 219.14 82.59 216.75 85.55C214.35 88.51 211.2 90.75 207.28 92.28C203.36 93.8 199.1 94.57 194.48 94.57V94.55Z" />        <path d="M290.21 94.55C286.38 94.55 282.81 93.76 279.5 92.2C276.19 90.63 273.51 88.39 271.47 85.48C269.42 82.56 268.4 79.1 268.4 75.1C268.4 70.31 269.58 66.39 271.93 63.35C274.28 60.3 277.52 58.04 281.66 56.56C285.79 55.08 290.43 54.34 295.57 54.34H310.98C310.98 51.38 310.52 48.9 309.61 46.9C308.7 44.9 307.35 43.35 305.56 42.26C303.77 41.17 301.57 40.63 298.96 40.63C295.91 40.63 293.19 41.3 290.8 42.65C288.41 44 286.95 46.24 286.43 49.38H269.71C270.14 44.68 271.75 40.63 274.54 37.23C277.32 33.84 280.9 31.22 285.25 29.4C289.6 27.57 294.26 26.66 299.22 26.66C305.31 26.66 310.47 27.79 314.7 30.05C318.92 32.32 322.17 35.52 324.43 39.65C326.69 43.79 327.83 48.68 327.83 54.34V74.06C328 75.97 328.7 77.28 329.92 77.98C331.14 78.68 332.75 79.02 334.75 79.02V93C330.66 93 327.24 92.61 324.5 91.82C321.76 91.03 319.51 89.88 317.77 88.36C316.03 86.84 314.55 84.9 313.33 82.55C311.33 85.95 308.21 88.8 303.99 91.11C299.77 93.42 295.17 94.57 290.21 94.57V94.55ZM306.8 17.37C304.45 17.37 302.44 16.87 300.79 15.87C299.13 14.87 297.57 13.87 296.09 12.87C294.61 11.87 292.83 11.37 290.74 11.37C289.17 11.37 287.93 11.85 287.02 12.8C286.11 13.76 285.47 15.24 285.13 17.24H276.25C277.12 11.67 278.88 7.58 281.54 4.97C284.2 2.36 287.53 1.04999 291.53 1.04999C293.97 1.04999 295.99 1.54999 297.6 2.54999C299.21 3.54999 300.78 4.56 302.3 5.56C303.82 6.56 305.59 7.06 307.59 7.06C309.07 7.06 310.31 6.58 311.31 5.62C312.31 4.66 312.94 3.17999 313.21 1.17999H322.09C321.31 6.74999 319.54 10.85 316.8 13.46C314.06 16.07 310.73 17.38 306.81 17.38L306.8 17.37ZM295.04 81.1C297.91 81.1 300.55 80.45 302.94 79.14C305.33 77.83 307.27 76 308.75 73.65C310.23 71.3 310.97 68.6 310.97 65.55V65.03H296.6C294.69 65.03 292.86 65.31 291.12 65.88C289.38 66.45 287.99 67.32 286.94 68.49C285.89 69.66 285.37 71.26 285.37 73.26C285.37 75.96 286.31 77.94 288.18 79.2C290.05 80.47 292.34 81.09 295.04 81.09V81.1Z" />        <path d="M371.05 94.55C364.52 94.55 358.71 93.13 353.61 90.3C348.52 87.47 344.53 83.49 341.66 78.35C338.79 73.21 337.35 67.3 337.35 60.59C337.35 53.54 338.89 47.46 341.99 42.37C345.08 37.28 349.22 33.38 354.4 30.68C359.58 27.98 365.3 26.63 371.57 26.63C377.84 26.63 383.93 28.05 389.07 30.87C394.2 33.7 398.28 37.64 401.28 42.69C404.28 47.74 405.78 53.7 405.78 60.58C405.78 67.46 404.3 72.95 401.34 78.08C398.38 83.22 394.31 87.25 389.13 90.16C383.95 93.08 377.92 94.54 371.04 94.54L371.05 94.55ZM371.31 80.06C374.79 80.06 377.82 79.17 380.39 77.38C382.96 75.59 384.98 73.2 386.46 70.2C387.94 67.2 388.68 63.91 388.68 60.34C388.68 56.25 387.87 52.76 386.26 49.89C384.65 47.02 382.54 44.84 379.93 43.36C377.32 41.88 374.45 41.14 371.31 41.14C367.91 41.14 364.93 41.97 362.36 43.62C359.79 45.28 357.79 47.56 356.35 50.48C354.91 53.4 354.19 56.77 354.19 60.6C354.19 64.43 354.95 67.83 356.48 70.79C358 73.75 360.07 76.04 362.68 77.65C365.29 79.26 368.16 80.07 371.3 80.07L371.31 80.06Z" />        <path d="M252.85 92.99C245.88 92.99 240.64 91.29 237.11 87.9C233.58 84.5 231.82 79.41 231.51 72.62V42.19H223.46V28.22H231.51V12.42H248.54V28.22H263.3V42.19H248.54V72.75C248.54 75.19 249.19 76.84 250.5 77.71C251.81 78.58 253.5 79.02 255.59 79.02H263.3V93H252.85V92.99Z" />      </g>      <g transform="translate(626.15 44.33)" fill="currentColor">        <path d="M44.41 96.38C35.01 96.38 27 94.33 20.38 90.24C13.76 86.15 8.70998 80.55 5.22998 73.46C1.74998 66.36 0 58.29 0 49.23C0 40.17 1.69997 32.08 5.08997 24.94C8.48997 17.8 13.49 12.16 20.11 8.03C26.73 3.9 34.82 1.83 44.4 1.83C55.37 1.83 64.36 4.54999 71.37 9.98999C78.38 15.43 82.75 23.07 84.5 32.91H66.08C64.95 27.95 62.53 24.05 58.83 21.22C55.13 18.39 50.23 16.97 44.14 16.97C38.57 16.97 33.76 18.28 29.71 20.89C25.66 23.5 22.55 27.2 20.37 31.99C18.19 36.78 17.11 42.53 17.11 49.23C17.11 55.93 18.2 61.57 20.37 66.4C22.55 71.23 25.66 74.93 29.71 77.5C33.76 80.07 38.57 81.35 44.14 81.35C50.23 81.35 55.13 80.02 58.83 77.37C62.53 74.71 64.95 71.03 66.08 66.33H84.5C82.76 75.73 78.38 83.09 71.37 88.4C64.36 93.71 55.37 96.37 44.4 96.37L44.41 96.38Z" />        <path d="M93.39 94.82V30.04H109.98V39.7C112.24 36.04 115.12 33.26 118.6 31.34C122.08 29.43 125.96 28.47 130.22 28.47V45.97H125.78C120.47 45.97 116.51 47.23 113.9 49.76C111.29 52.29 109.98 56.51 109.98 62.43V94.82H93.39Z" />        <path d="M144.71 21.68C141.75 21.68 139.2 20.61 137.07 18.48C134.93 16.35 133.87 13.8 133.87 10.84C133.87 7.88 134.93 5.21999 137.07 3.12999C139.2 1.03999 141.75 0 144.71 0C147.67 0 150.33 1.03999 152.42 3.12999C154.51 5.21999 155.55 7.79 155.55 10.84C155.55 13.89 154.51 16.35 152.42 18.48C150.33 20.62 147.76 21.68 144.71 21.68ZM136.35 94.82V30.04H153.07V94.82H136.35Z" />        <path d="M182.85 96.38C179.02 96.38 175.45 95.59 172.14 94.03C168.83 92.46 166.15 90.22 164.11 87.31C162.06 84.39 161.04 80.93 161.04 76.93C161.04 72.14 162.22 68.22 164.57 65.18C166.92 62.13 170.16 59.87 174.3 58.39C178.43 56.91 183.07 56.17 188.21 56.17H203.62C203.62 53.21 203.16 50.73 202.25 48.73C201.34 46.73 199.99 45.18 198.2 44.09C196.41 43 194.21 42.46 191.6 42.46C188.55 42.46 185.83 43.13 183.44 44.48C181.05 45.83 179.59 48.07 179.07 51.21H162.35C162.78 46.51 164.39 42.46 167.18 39.06C169.96 35.67 173.54 33.05 177.89 31.23C182.24 29.4 186.9 28.49 191.86 28.49C197.95 28.49 203.11 29.62 207.34 31.88C211.56 34.15 214.81 37.35 217.07 41.48C219.33 45.62 220.47 50.51 220.47 56.17V75.89C220.64 77.8 221.34 79.11 222.56 79.81C223.78 80.51 225.39 80.85 227.39 80.85V94.83C223.3 94.83 219.88 94.44 217.14 93.65C214.4 92.86 212.15 91.71 210.41 90.19C208.67 88.67 207.19 86.73 205.97 84.38C203.97 87.78 200.85 90.63 196.63 92.94C192.41 95.25 187.81 96.4 182.85 96.4V96.38ZM187.68 82.93C190.55 82.93 193.19 82.28 195.58 80.97C197.97 79.66 199.91 77.83 201.39 75.48C202.87 73.13 203.61 70.43 203.61 67.38V66.86H189.24C187.33 66.86 185.5 67.14 183.76 67.71C182.02 68.28 180.63 69.15 179.58 70.32C178.53 71.49 178.01 73.09 178.01 75.09C178.01 77.79 178.95 79.77 180.82 81.03C182.69 82.3 184.98 82.92 187.68 82.92V82.93Z" />        <path d="M255.33 94.82C248.36 94.82 243.12 93.12 239.59 89.73C236.06 86.33 234.3 81.24 233.99 74.45V44.02H225.94V30.05H233.99V14.25H251.02V30.05H265.78V44.02H251.02V74.58C251.02 77.02 251.67 78.67 252.98 79.54C254.29 80.41 255.98 80.85 258.07 80.85H265.78V94.83H255.33V94.82Z" />        <path d="M282.37 21.68C279.41 21.68 276.86 20.61 274.73 18.48C272.59 16.35 271.53 13.8 271.53 10.84C271.53 7.88 272.6 5.21999 274.73 3.12999C276.86 1.03999 279.41 0 282.37 0C285.33 0 287.98 1.03999 290.08 3.12999C292.17 5.21999 293.22 7.79 293.22 10.84C293.22 13.89 292.18 16.35 290.08 18.48C287.99 20.62 285.42 21.68 282.37 21.68ZM274.01 94.82V30.04H290.73V94.82H274.01Z" />        <path d="M318.93 94.82L294.64 30.04H312.4L329.12 79.8L345.71 30.04H363.34L339.05 94.82H318.94H318.93Z" />        <path d="M383.32 96.38C379.49 96.38 375.92 95.59 372.61 94.03C369.3 92.46 366.62 90.22 364.58 87.31C362.53 84.39 361.51 80.93 361.51 76.93C361.51 72.14 362.69 68.22 365.04 65.18C367.39 62.13 370.63 59.87 374.77 58.39C378.9 56.91 383.54 56.17 388.68 56.17H404.09C404.09 53.21 403.63 50.73 402.72 48.73C401.81 46.73 400.46 45.18 398.67 44.09C396.88 43 394.69 42.46 392.08 42.46C389.03 42.46 386.31 43.13 383.92 44.48C381.53 45.83 380.07 48.07 379.55 51.21H362.83C363.27 46.51 364.87 42.46 367.66 39.06C370.44 35.67 374.02 33.05 378.37 31.23C382.72 29.4 387.38 28.49 392.34 28.49C398.44 28.49 403.59 29.62 407.82 31.88C412.04 34.15 415.28 37.35 417.55 41.48C419.81 45.62 420.95 50.51 420.95 56.17V75.89C421.12 77.8 421.82 79.11 423.04 79.81C424.26 80.51 425.87 80.85 427.87 80.85V94.83C423.78 94.83 420.36 94.44 417.62 93.65C414.88 92.86 412.64 91.71 410.9 90.19C409.16 88.67 407.68 86.73 406.46 84.38C404.46 87.78 401.34 90.63 397.12 92.94C392.9 95.25 388.31 96.4 383.34 96.4L383.32 96.38ZM388.15 82.93C391.02 82.93 393.66 82.28 396.05 80.97C398.44 79.66 400.38 77.83 401.86 75.48C403.34 73.13 404.08 70.43 404.08 67.38V66.86H389.71C387.8 66.86 385.97 67.14 384.23 67.71C382.49 68.28 381.09 69.15 380.05 70.32C379 71.49 378.48 73.09 378.48 75.09C378.48 77.79 379.42 79.77 381.29 81.03C383.16 82.3 385.45 82.92 388.15 82.92V82.93Z" />      </g>    </svg></a><span class="pill"><i aria-hidden="true"></i>Guia de instalação</span></div>
+    <span class="eyebrow">Financeiro · template para alunos</span>
+    <h1>Instale o Financeiro no seu Claude em <em>10 minutos</em></h1>
+    <p class="lead">Uma tela de fechamento do mês pronta: entradas, saídas, clientes fixos, meta, saldo em caixa e notas fiscais. <strong>Você cola um pedido no Claude Code</strong> e ele instala, roda e deixa com a sua marca. Marque os passos conforme for fazendo.</p>
+    <div class="progresso" aria-live="polite">
+      <div class="trilho" role="progressbar" aria-label="Seu progresso" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="progresso-barra"><div class="barra" id="progresso-preenchido"></div></div>
+      <span class="rotulo" id="progresso-texto">0 de 8 passos</span>
+    </div>
+  </div>
+</header>
+
+<main class="dobra">
+  <div class="wrap">
+
+    <div class="aviso" id="aviso-link" hidden>
+      <span aria-hidden="true">⚠</span>
+      <p><b>Link do template ainda provisório.</b> Os pedidos abaixo usam um endereço de exemplo. Use o link que o seu professor te passou no lugar dele.</p>
+    </div>
+
+    <section id="antes">
+      <header>
+        <span class="eyebrow">Passo zero</span>
+        <h2>Antes de começar: <em>3 coisas</em></h2>
+        <p>Só precisa fazer uma vez. Se já tem, marque e siga.</p>
+      </header>
+      <ul class="lista">
+        <li class="passo" data-passo="pre-1">
+          <span class="num" aria-hidden="true"><span>1</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-pre-1"><span><b>Claude Code instalado.</b> É o Claude que mexe em arquivos e roda comandos no seu computador. O chat do site não faz isso.</span></label>
+            <p class="dica">Jeito mais fácil: o <a href="https://claude.ai/download">app do Claude para computador</a>, aba <b>Code</b>. Pelo terminal também funciona: instale com <code class="inline">npm install -g @anthropic-ai/claude-code</code> e abra com <code class="inline">claude</code>. Precisa de um plano que inclua o Claude Code.</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="pre-2">
+          <span class="num" aria-hidden="true"><span>2</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-pre-2"><span><b>Node.js instalado.</b> É o que roda o Financeiro no seu computador.</span></label>
+            <p class="dica">Baixe a versão LTS em <a href="https://nodejs.org">nodejs.org</a> e instale com "avançar, avançar". Não sabe se já tem? Deixe o Claude conferir:</p>
+            <div class="prompt">
+              <div class="rot"><span>Cole no Claude Code</span><button class="copiar" data-copiar="p-node"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-node">Confere se eu tenho o Node.js instalado neste computador. Se não tiver, me guie para instalar a versão LTS e confirme quando estiver funcionando.</pre>
+            </div>
+          </div>
+        </li>
+        <li class="passo" data-passo="pre-3">
+          <span class="num" aria-hidden="true"><span>3</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-pre-3"><span><b>O link do template em mãos.</b> Seu professor te passou um endereço (GitHub) ou um arquivo .zip.</span></label>
+            <p class="dica">Link deste guia: <code class="inline" id="link-template"></code></p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="caso">
+      <header>
+        <span class="eyebrow">Escolha</span>
+        <h2>Qual é o <em>seu caso</em>?</h2>
+        <p>Os passos mudam um pouco. Escolha um e o guia mostra só o que importa.</p>
+      </header>
+      <div class="escolha" role="group" aria-label="Escolha o seu caso">
+        <button class="opcao" type="button" data-caso="pronto" aria-pressed="true">
+          <span class="radio" aria-hidden="true"></span>
+          <span class="txt"><span class="t">Quero usar o Financeiro pronto</span>
+          <span class="d">Você não tem um sistema ainda. Quer abrir a tela e começar a usar hoje.</span></span>
+        </button>
+        <button class="opcao" type="button" data-caso="integrar" aria-pressed="false">
+          <span class="radio" aria-hidden="true"></span>
+          <span class="txt"><span class="t">Quero encaixar no meu sistema</span>
+          <span class="d">Você já tem um projeto feito com o Claude (painel, site, app) e quer o Financeiro dentro dele.</span></span>
+        </button>
+      </div>
+    </section>
+
+    <section id="passos-pronto" data-para="pronto">
+      <header>
+        <span class="eyebrow">Caminho A</span>
+        <h2>Instalar e <em>abrir</em></h2>
+        <p>Cinco passos. O Claude faz o trabalho pesado; você só cola e aceita.</p>
+      </header>
+      <ol class="lista">
+        <li class="passo" data-passo="a-1">
+          <span class="num" aria-hidden="true"><span>1</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-a-1"><span><b>Crie uma pasta vazia</b> no seu computador, por exemplo <code class="inline">financeiro</code>, e abra essa pasta no Claude Code.</span></label>
+            <p class="dica">No app: aba <b>Code</b> → <b>Abrir pasta</b> → escolha a pasta. No terminal: entre na pasta com <code class="inline">cd financeiro</code> e digite <code class="inline">claude</code>.</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="a-2">
+          <span class="num" aria-hidden="true"><span>2</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-a-2"><span><b>Cole este pedido</b> e aperte Enter.</span></label>
+            <div class="prompt">
+              <div class="rot"><span>Recebeu um link</span><button class="copiar" data-copiar="p-clonar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-clonar"></pre>
+            </div>
+            <div class="prompt">
+              <div class="rot"><span>Recebeu um .zip</span><button class="copiar" data-copiar="p-zip"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-zip">Descompactei o template do Financeiro nesta pasta. Leia o CLAUDE.md dela, instale as dependências e rode o projeto. Depois me mostre a tela funcionando no navegador.</pre>
+            </div>
+            <p class="dica">Com o .zip: descompacte antes, de modo que os arquivos (CLAUDE.md, package.json…) fiquem direto dentro da pasta que você abriu.</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="a-3">
+          <span class="num" aria-hidden="true"><span>3</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-a-3"><span><b>Diga sim quando ele pedir permissão.</b> Ele vai querer rodar <code class="inline">npm install</code> e <code class="inline">npm run dev</code>. Pode aceitar.</span></label>
+            <p class="dica">Leva de 1 a 3 minutos na primeira vez. Se ele perguntar algo que você não entende, responda "pode seguir do jeito mais simples".</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="a-4">
+          <span class="num" aria-hidden="true"><span>4</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-a-4"><span><b>Abra o endereço que ele mostrar</b>, normalmente <code class="inline">http://localhost:5173</code>. A tela abre com dados de exemplo.</span></label>
+            <p class="dica">Explore à vontade. Quando quiser usar com seus números, clique em <b>Começar do zero</b> na faixa do topo. Para abrir de novo outro dia: abra a pasta no Claude Code e peça "rode o projeto".</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="a-5">
+          <span class="num" aria-hidden="true"><span>5</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-a-5"><span><b>Deixe com a sua cara.</b> O botão de paleta no topo da tela troca logo e cores na hora.</span></label>
+            <p class="dica">Quer que a marca valha em qualquer computador, não só no seu navegador? Use o gerador de pedido logo abaixo.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="passos-integrar" data-para="integrar" hidden>
+      <header>
+        <span class="eyebrow">Caminho B</span>
+        <h2>Encaixar no <em>seu sistema</em></h2>
+        <p>O template vem com um guia próprio para o Claude. Você só aponta para ele.</p>
+      </header>
+      <ol class="lista">
+        <li class="passo" data-passo="b-1">
+          <span class="num" aria-hidden="true"><span>1</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-b-1"><span><b>Abra o seu projeto no Claude Code</b>: a pasta do sistema que você já tem.</span></label>
+            <p class="dica">No app: aba <b>Code</b> → <b>Abrir pasta</b>. Se o projeto está no GitHub e não no seu computador, peça antes: "clone o meu projeto X nesta pasta".</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="b-2">
+          <span class="num" aria-hidden="true"><span>2</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-b-2"><span><b>Cole este pedido</b> e aperte Enter.</span></label>
+            <div class="prompt">
+              <div class="rot"><span>Recebeu um link</span><button class="copiar" data-copiar="p-integrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-integrar"></pre>
+            </div>
+            <div class="prompt">
+              <div class="rot"><span>Recebeu um .zip</span><button class="copiar" data-copiar="p-integrar-zip"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-integrar-zip">Descompactei o template do Financeiro na pasta financeiro-template/ dentro deste projeto. Leia o CLAUDE.md de lá antes de começar e integre a tela de Financeiro aqui, seguindo o roteiro de integração. Coloque um item "Financeiro" no menu, use a cor da minha marca e, por enquanto, guarde os dados localmente, sem banco. No fim, rode o projeto e me mostre a tela funcionando.</pre>
+            </div>
+            <p class="dica">Tem banco de dados (Supabase) no seu sistema? Troque "guarde os dados localmente" por "ligue os dados no meu Supabase, rodando o schema que vem no template".</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="b-3">
+          <span class="num" aria-hidden="true"><span>3</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-b-3"><span><b>Aceite as permissões e responda o que ele perguntar.</b> Ele pode perguntar em qual menu colocar a tela ou qual cor usar.</span></label>
+            <p class="dica">Ele vai instalar pacotes, copiar a pasta do Financeiro para dentro do seu projeto e ligar o menu. Leva alguns minutos.</p>
+          </div>
+        </li>
+        <li class="passo" data-passo="b-4">
+          <span class="num" aria-hidden="true"><span>4</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-b-4"><span><b>Confira que funciona</b> antes de dar por terminado.</span></label>
+            <div class="prompt">
+              <div class="rot"><span>Cole depois que ele terminar</span><button class="copiar" data-copiar="p-conferir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+              <pre id="p-conferir">Confira o Financeiro no navegador: lance uma entrada, dê baixa nela, troque de mês, abra o botão "Categorias" e recarregue a página. Me diga o que testou e se algo quebrou.</pre>
+            </div>
+          </div>
+        </li>
+        <li class="passo" data-passo="b-5">
+          <span class="num" aria-hidden="true"><span>5</span></span>
+          <div class="corpo">
+            <label class="check"><input type="checkbox" id="c-b-5"><span><b>Deixe com a sua cara.</b> O botão de paleta no topo da tela troca logo e cores; o gerador abaixo faz valer no sistema inteiro.</span></label>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="marca">
+      <header>
+        <span class="eyebrow">Sua cara</span>
+        <h2>Deixe com a <em>sua marca</em></h2>
+        <p>Preencha e copie. O Claude aplica nome, cor e logo em tudo: botões, gráfico, ícone da aba.</p>
+      </header>
+      <div class="card">
+        <div class="campos">
+          <div class="campo"><label for="g-nome">Nome do negócio</label><input type="text" id="g-nome" placeholder="Estúdio Maré" autocomplete="organization"></div>
+          <div class="campo"><label for="g-cor">Cor principal</label><div class="cor"><input type="color" id="g-cor" value="#5755ff" aria-label="Escolher cor"><input type="text" id="g-cor-hex" value="#5755FF" maxlength="7" spellcheck="false" aria-label="Cor em hexadecimal"></div></div>
+          <div class="campo"><label for="g-logo">Logo</label><select id="g-logo"><option value="nao">Ainda não tenho</option><option value="sim">Tenho um arquivo (PNG ou SVG)</option></select></div>
+          <div class="campo"><label for="g-tema">Tema padrão</label><select id="g-tema"><option value="escuro">Escuro</option><option value="claro">Claro</option></select></div>
+        </div>
+        <div class="prompt">
+          <div class="rot"><span>Seu pedido</span><button class="copiar" data-copiar="p-marca"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+          <pre id="p-marca"></pre>
+        </div>
+        <p class="dica">Com logo: antes de colar, arraste o arquivo da logo para dentro da pasta do projeto (o Claude acha pelo nome). Quadrado e com fundo transparente fica melhor.</p>
+      </div>
+    </section>
+
+    <section id="dados">
+      <header>
+        <span class="eyebrow">Dados</span>
+        <h2>Onde ficam os <em>seus dados</em></h2>
+        <p>Por padrão, no próprio navegador do seu computador. Nada sobe para servidor nenhum.</p>
+      </header>
+      <div class="grade-2">
+        <div class="card">
+          <h3>No navegador (padrão)</h3>
+          <p>Funciona na hora, sem conta. Os dados ficam só naquele navegador: limpar o histórico apaga tudo, e outro computador não vê. Bom para começar e para quem usa sozinho.</p>
+        </div>
+        <div class="card">
+          <h3>Na nuvem (Supabase)</h3>
+          <p>Conta gratuita, dados em banco de verdade, com login. Acessa de qualquer lugar. O template já traz o banco pronto; o Claude te guia.</p>
+          <div class="prompt">
+            <div class="rot"><span>Cole quando quiser migrar</span><button class="copiar" data-copiar="p-supabase"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/></svg><span>Copiar</span></button></div>
+            <pre id="p-supabase">Quero guardar os dados do Financeiro no Supabase em vez do navegador. Me guie passo a passo: criar o projeto gratuito no supabase.com, rodar o arquivo supabase/schema.sql no SQL Editor, preencher o .env com a URL e a chave pública, e testar o login. Me avise do que eu preciso fazer no site do Supabase e do que você faz aqui.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ajuda">
+      <header>
+        <span class="eyebrow">Socorro</span>
+        <h2>Deu <em>errado</em>?</h2>
+        <p>Os tropeços mais comuns e o que colar no Claude.</p>
+      </header>
+      <div class="faq">
+        <details>
+          <summary>O Claude diz que não encontrou "npm" ou "node"</summary>
+          <div class="r"><p>O Node.js não está instalado ou o Claude Code foi aberto antes da instalação. Instale pelo <a href="https://nodejs.org">nodejs.org</a>, feche e abra o Claude Code de novo e repita o pedido.</p></div>
+        </details>
+        <details>
+          <summary>Ele pede permissão toda hora</summary>
+          <div class="r"><p>É normal: o Claude Code pede antes de rodar comandos e mexer em arquivos. Aceite os pedidos de <code class="inline">npm install</code>, <code class="inline">npm run dev</code> e de criar ou editar arquivos dentro da pasta do projeto. Se ele quiser mexer fora da pasta, recuse e pergunte por quê.</p></div>
+        </details>
+        <details>
+          <summary>Abri o endereço e a tela está em branco</summary>
+          <div class="r"><p>Cole no Claude: <b>"A tela em localhost está em branco. Abra o console do navegador, leia o erro e corrija."</b> Nove em dez vezes é um arquivo faltando que ele resolve sozinho.</p></div>
+        </details>
+        <details>
+          <summary>Diz que a porta 5173 está em uso</summary>
+          <div class="r"><p>Outro projeto está rodando. Cole: <b>"Rode em outra porta livre e me diga o endereço."</b></p></div>
+        </details>
+        <details>
+          <summary>Fechei tudo. Como abro de novo?</summary>
+          <div class="r"><p>Abra a mesma pasta no Claude Code e cole: <b>"Rode o projeto e me mostre o endereço."</b> Os seus dados continuam lá, no navegador.</p></div>
+        </details>
+        <details>
+          <summary>Só tenho o chat do Claude, não o Claude Code</summary>
+          <div class="r"><p>O chat não instala nem roda programas. Baixe o <a href="https://claude.ai/download">app do Claude para computador</a> e use a aba <b>Code</b>, ou instale pelo terminal como no passo 1. Enquanto isso, dá para abrir a versão de demonstração em um arquivo só, se o seu professor te mandou o <code class="inline">.html</code>: clique duas vezes nele.</p></div>
+        </details>
+        <details>
+          <summary>Quero tirar os dados de exemplo</summary>
+          <div class="r"><p>Na faixa do topo da tela, clique em <b>Começar do zero</b>. Se a faixa já sumiu, cole no Claude: <b>"Apague os dados de exemplo do Financeiro e deixe a tela vazia."</b></p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="final">
+      <div class="final">
+        <h3>Travou em algum passo?</h3>
+        <p>Mande para a equipe do Gestão Criativa um print da tela do Claude com a última mensagem dele. É o que a gente precisa para te destravar rápido.</p>
+        <p><b>Dica que vale ouro:</b> quando o Claude perguntar algo técnico, peça "me explique em uma frase e sugira a opção mais simples".</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Gestão Criativa · Financeiro, template para alunos.</span>
+    <span>Seu progresso neste guia fica salvo só neste navegador.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ── Link do template: troque pelo oficial antes de mandar para os alunos. ──
+  var LINK_TEMPLATE = "https://github.com/gabrieljuste0971-droid/financeiro-template";
+  var provisorio = /SEU-USUARIO/.test(LINK_TEMPLATE);
+  document.getElementById("link-template").textContent = LINK_TEMPLATE;
+  document.getElementById("aviso-link").hidden = !provisorio;
+
+  document.getElementById("p-clonar").textContent =
+    "Clone " + LINK_TEMPLATE + " dentro desta pasta, instale as dependências e rode o projeto. Depois me mostre a tela funcionando no navegador.";
+  document.getElementById("p-integrar").textContent =
+    "Baixe o template " + LINK_TEMPLATE + " para a pasta financeiro-template/ dentro deste projeto. Leia o CLAUDE.md de lá antes de começar e integre a tela de Financeiro aqui, seguindo o roteiro de integração. Coloque um item \"Financeiro\" no menu, use a cor da minha marca e, por enquanto, guarde os dados localmente, sem banco. No fim, rode o projeto e me mostre a tela funcionando.";
+
+  // ── Armazenamento local: só conveniência (progresso e caso escolhido). ──
+  var CHAVE = "gc-guia-financeiro";
+  function ler(){ try { return JSON.parse(localStorage.getItem(CHAVE) || "{}") || {}; } catch (e) { return {}; } }
+  function gravar(e){ try { localStorage.setItem(CHAVE, JSON.stringify(e)); } catch (x) {} }
+  var estado = ler();
+
+  // ── Caso (pronto × integrar) ──
+  var opcoes = Array.prototype.slice.call(document.querySelectorAll(".opcao"));
+  function mostrarCaso(caso){
+    opcoes.forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.caso === caso)); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-para]"), function(s){ s.hidden = s.dataset.para !== caso; });
+    atualizarProgresso();
+  }
+  opcoes.forEach(function(b){ b.addEventListener("click", function(){ estado.caso = b.dataset.caso; gravar(estado); mostrarCaso(estado.caso); }); });
+
+  // ── Checklist com progresso ──
+  var caixas = Array.prototype.slice.call(document.querySelectorAll('.check input[type="checkbox"]'));
+  caixas.forEach(function(c){
+    c.checked = !!(estado.feito && estado.feito[c.id]);
+    c.closest(".passo").classList.toggle("feito", c.checked);
+    c.addEventListener("change", function(){
+      estado.feito = estado.feito || {};
+      estado.feito[c.id] = c.checked;
+      gravar(estado);
+      c.closest(".passo").classList.toggle("feito", c.checked);
+      atualizarProgresso();
+    });
+  });
+  function atualizarProgresso(){
+    var visiveis = caixas.filter(function(c){ return !c.closest("[hidden]"); });
+    var feitos = visiveis.filter(function(c){ return c.checked; }).length;
+    var total = visiveis.length;
+    document.getElementById("progresso-texto").textContent = feitos + " de " + total + " passos";
+    var barra = document.getElementById("progresso-barra");
+    barra.setAttribute("aria-valuemax", total); barra.setAttribute("aria-valuenow", feitos);
+    document.getElementById("progresso-preenchido").style.width = (total ? (feitos / total) * 100 : 0) + "%";
+  }
+  mostrarCaso(estado.caso === "integrar" ? "integrar" : "pronto");
+
+  // ── Gerador do pedido de marca ──
+  var gNome = document.getElementById("g-nome"), gCor = document.getElementById("g-cor"), gHex = document.getElementById("g-cor-hex"),
+      gLogo = document.getElementById("g-logo"), gTema = document.getElementById("g-tema"), saida = document.getElementById("p-marca");
+  function hexOk(v){ return /^#[0-9a-f]{6}$/i.test(v); }
+  function gerar(){
+    var nome = gNome.value.trim() || "meu negócio";
+    var cor = hexOk(gHex.value) ? gHex.value.toUpperCase() : gCor.value.toUpperCase();
+    var logo = gLogo.value === "sim"
+      ? " O logo está no arquivo que coloquei na pasta do projeto: use ele no topo da tela e no ícone da aba."
+      : " Ainda não tenho logo: deixe o ícone padrão.";
+    saida.textContent = "Deixe o Financeiro com a minha marca. Nome: " + nome + ". Cor principal: " + cor + "." + logo +
+      " Tema padrão: " + gTema.value + ". Faça isso em src/marca.js (ou no arquivo equivalente, se o Financeiro estiver dentro do meu sistema) para valer em qualquer computador, e me mostre a tela depois.";
+  }
+  gNome.addEventListener("input", gerar); gLogo.addEventListener("change", gerar); gTema.addEventListener("change", gerar);
+  gCor.addEventListener("input", function(){ gHex.value = gCor.value.toUpperCase(); gerar(); });
+  gHex.addEventListener("input", function(){ if (hexOk(gHex.value)) gCor.value = gHex.value; gerar(); });
+  gerar();
+
+  // ── Copiar (com fallback de seleção) ──
+  Array.prototype.forEach.call(document.querySelectorAll("[data-copiar]"), function(btn){
+    var alvo = document.getElementById(btn.dataset.copiar);
+    var texto = btn.lastChild.textContent;
+    function pronto(ok){
+      btn.lastChild.textContent = ok ? "Copiado" : "Selecione e copie";
+      btn.classList.toggle("ok", ok);
+      setTimeout(function(){ btn.lastChild.textContent = texto; btn.classList.remove("ok"); }, 1800);
+    }
+    btn.addEventListener("click", function(){
+      var t = alvo.textContent;
+      var selecionar = function(){
+        var r = document.createRange(); r.selectNodeContents(alvo);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        pronto(false);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(function(){ pronto(true); }, selecionar);
+      } else { selecionar(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
