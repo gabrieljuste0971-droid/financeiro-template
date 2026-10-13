@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Casca do app. Os tokens e animações da tela estão em
+   src/financeiro/financeiro.css (importado em main.jsx). */
+
+html, body, #root { height: 100%; }
+
+/* Cobre overscroll e o instante antes do React montar. */
+body {
+  font-family: var(--fonte), ui-sans-serif, system-ui, sans-serif;
+  background-color: rgb(var(--s0));
+  color: rgb(var(--t1));
+}
+
+/* iOS dá zoom ao focar um campo com fonte < 16px. Em ponteiro grosso (toque)
+   todo campo sobe pra 16px; o layout mobile já conta com essa folga. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea { font-size: 16px; }
+
+  /* A tela tem estados :active próprios — o flash cinza do WebKit só atrapalha. */
+  button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+}

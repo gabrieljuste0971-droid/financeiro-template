@@ -1,0 +1,141 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Financeiro — tokens e animações
+
+   CSS puro (sem @tailwind / @apply): pode ser importado em qualquer projeto.
+   As classes do Tailwind que leem estes tokens vêm de `tailwind.preset.js`.
+
+   Tudo é tripla RGB ("99 102 241") para o Tailwind aceitar alpha (`bg-s2/80`).
+   O tema segue a classe `dark` no <html>: sem ela, vale o claro.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- Marca ----------
+   Valores de reserva (índigo #6366f1), usados só se `aplicarMarca()` não for
+   chamado. Em uso normal tema.js sobrescreve com a cor de `src/marca.js` — não
+   precisa editar aqui para trocar a marca. */
+:root {
+  --brand-50: 244 244 254;  --brand-100: 232 232 253; --brand-200: 208 209 251;
+  --brand-300: 177 179 248; --brand-400: 138 140 245; --brand-500: 99 102 241;
+  --brand-600: 84 87 205;   --brand-700: 69 71 169;   --brand-800: 54 56 133;
+  --brand-900: 40 41 96;    --brand-950: 25 26 60;
+  --brand-forte: 143 145 245;
+  --fonte: "Rethink Sans";
+}
+
+/* ---------- Neutros ----------
+   O cinza da tela (texto, fios, fundos discretos). Padrão: "carvão", um cinza
+   levemente frio. Com `base` em src/marca.js, `aplicarMarca()` recalcula a
+   escala puxada para a cor da marca (ex.: um navy) — e o tema escuro passa a
+   usar essa cor como fundo. */
+:root {
+  --neutro-50: 246 247 248;  --neutro-100: 236 238 240; --neutro-200: 221 224 227;
+  --neutro-300: 195 200 205; --neutro-400: 152 160 167; --neutro-500: 109 116 123;
+  --neutro-600: 77 84 91;    --neutro-700: 54 59 65;    --neutro-800: 34 38 43;
+  --neutro-900: 21 24 28;    --neutro-950: 10 12 14;
+}
+
+/* ---------- Superfícies, texto e feedback ----------
+   Escada de superfícies: filho = pai + 1 degrau; campo = pai − 1 (cavado).
+   s0 canvas · s1 fundo da tela · s2 card · s3 card dentro de card ·
+   s4 item ativo/hover/botão · s5 menu.   t1–t4: texto do mais forte ao mais fraco. */
+:root {
+  color-scheme: light;
+  --s0: 238 240 242;  --s1: 244 245 247;  --s2: 255 255 255;
+  --s3: 243 244 246;  --s4: 233 235 238;  --s5: 255 255 255;
+  --t1: var(--neutro-900); --t2: var(--neutro-600); --t3: var(--neutro-500); --t4: var(--neutro-400);
+  --line: var(--neutro-900); --line-a: .07; --line-b: .11; --line-dash-a: .18;
+  --acc: var(--brand-500); --acc-hover: var(--brand-600); --acc-strong: var(--brand-forte); --acc-text: var(--brand-700);
+  --ok: 61 203 134;   --ok-text: 21 128 61;
+  --warn: 242 180 62; --warn-text: 180 83 9;
+  --bad: 242 109 109; --bad-text: 190 24 60;
+  --info: 92 157 255; --info-text: 29 78 216;
+  --edge: inset 0 1px 0 rgb(255 255 255 / .8);
+  --sh-2: 0 8px 24px -8px rgb(20 23 28 / .16);
+  --sh-3: 0 2px 8px rgb(20 23 28 / .06), 0 16px 48px -12px rgb(20 23 28 / .18);
+  --sh-4: 0 32px 80px -20px rgb(20 23 28 / .22);
+  --glow: 0 0 0 1px rgb(var(--acc-strong) / .35), 0 0 24px -4px rgb(var(--acc-strong) / .35);
+}
+html.dark {
+  color-scheme: dark;
+  /* --fundo-* e --texto-* só existem quando a marca define `base`; sem isso
+     valem os valores de carvão depois da vírgula. */
+  --s0: var(--fundo-0, 10 12 14); --s1: var(--fundo-1, 16 19 22); --s2: var(--fundo-2, 21 24 28);
+  --s3: var(--fundo-3, 27 31 36); --s4: var(--fundo-4, 34 38 43); --s5: var(--fundo-5, 42 47 53);
+  --t1: var(--texto-1, 242 243 245); --t2: var(--texto-2, 162 168 175);
+  --t3: var(--texto-3, 109 116 123); --t4: var(--texto-4, 77 84 91);
+  --line: 255 255 255; --line-a: .06; --line-b: .10; --line-dash-a: .14;
+  --acc-hover: var(--brand-400); --acc-text: var(--brand-300);
+  --ok-text: 110 231 168; --warn-text: 247 200 106; --bad-text: 247 154 154; --info-text: 143 187 255;
+  --edge: inset 0 1px 0 rgb(255 255 255 / .05);
+  --sh-2: 0 8px 24px -8px rgb(0 0 0 / .55);
+  --sh-3: 0 2px 8px rgb(0 0 0 / .4), 0 16px 48px -12px rgb(0 0 0 / .6);
+  --sh-4: 0 32px 80px -20px rgb(0 0 0 / .7);
+}
+
+/* ---------- Animações ----------
+   Ease-out expressivo ao entrar, durações curtas (220–420ms). */
+@keyframes fin-fade-in    { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fin-fade-in-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fin-scale-in   { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+/* Folha que sobe do rodapé — padrão de diálogo no celular. */
+@keyframes fin-sheet-in   { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+
+.animate-fade-in    { animation: fin-fade-in .3s ease-out both; }
+.animate-fade-in-up { animation: fin-fade-in-up .42s cubic-bezier(.22,1,.36,1) both; }
+.animate-scale-in   { animation: fin-scale-in .24s cubic-bezier(.22,1,.36,1) both; }
+.animate-sheet-in   { animation: fin-sheet-in .34s cubic-bezier(.22,1,.36,1) both; }
+
+/* Baixa de lançamento: o check se desenha, o botão dá um pop e uma varredura de
+   luz cruza a linha. Só no instante da confirmação — desfazer não anima. */
+@keyframes fin-baixa-draw  { to { stroke-dashoffset: 0; } }
+@keyframes fin-baixa-pop   { 0% { transform: scale(.6); } 60% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes fin-baixa-sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+/* O traço só ganha dasharray enquanto anima — linha já paga ao montar a tela
+   desenha o check inteiro de cara, sem piscar. */
+.animate-baixa-check path { stroke-dasharray: 26; stroke-dashoffset: 26; animation: fin-baixa-draw .26s cubic-bezier(.22,1,.36,1) .05s forwards; }
+.animate-baixa-pop   { animation: fin-baixa-pop .34s cubic-bezier(.16,1,.3,1); }
+.animate-baixa-sweep { animation: fin-baixa-sweep .72s cubic-bezier(.22,1,.36,1) forwards; }
+
+/* Órbita: um traço de luz que dá a volta na borda do card em destaque (Lucro do
+   mês). O anel é um filho absoluto mascarado pra só a borda pintar (1.5px, no
+   raio do card); dentro dele gira um quadrado com gradiente cônico. Anima só
+   `rotate` (composição na GPU). A cor vem de --orbita-cor: verde no lucro,
+   rosa no prejuízo — é semântica, não segue a marca. */
+@keyframes fin-orbita { to { rotate: 360deg; } }
+.fin-orbita {
+  --orbita-cor: #059669;
+  position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+  overflow: hidden; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.dark .fin-orbita { --orbita-cor: #34d399; }
+.fin-orbita-rose { --orbita-cor: #e11d48; }
+.dark .fin-orbita-rose { --orbita-cor: #fb7185; }
+/* Quadrado de 200% da largura: cobre os cantos de qualquer card mais largo que
+   alto enquanto gira. */
+.fin-orbita-luz {
+  position: absolute; top: 50%; left: 50%; width: 200%; aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0deg 235deg, var(--orbita-cor) 360deg);
+  animation: fin-orbita 4s linear infinite;
+  will-change: rotate;
+}
+
+/* ---------- Utilitários ---------- */
+/* Rodapé de folha/diálogo que respeita o indicador de gestos do iOS. */
+.pb-safe-3 { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
+/* Rolagem interna não puxa a página (evita o pull-to-refresh no meio da lista). */
+.overscroll-contain-y { overscroll-behavior-y: contain; }
+
+/* Quem prefere menos movimento: as animações da tela viram corte seco. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in, .animate-fade-in-up, .animate-scale-in, .animate-sheet-in,
+  .animate-baixa-check path, .animate-baixa-pop, .animate-baixa-sweep {
+    animation-duration: 0.01ms !important;
+  }
+  /* Traço parado na borda vira ruído — some. */
+  .fin-orbita { display: none; }
+}
